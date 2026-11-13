@@ -1,3 +1,22 @@
+<?php
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => false,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
+
+session_start();
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +40,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="" id="add-user-form" class="p-2" novalidate>
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                         <div class="row mb-3 gx-3">
                             <div class="col">
                                 <input type="text" name="fname" id="" class="form-control form-control-lg" placeholder="Enter First Name" required>
@@ -56,6 +76,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="" id="edit-user-form" class="p-2" novalidate>
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="id" id="id">
                         <div class="row mb-3 gx-3">
                             <div class="col">

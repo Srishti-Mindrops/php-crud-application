@@ -34,7 +34,7 @@ addForm.addEventListener("submit", async (e) => {
 
 const fetchAllUsers = async () => {
   const data = await fetch("action.php?read=1", {
-    method: "POST",
+    method: "GET",
   });
   const response = await data.text();
   tbody.innerHTML = response;
@@ -59,6 +59,7 @@ const editUser = async (id) => {
   document.getElementById("lname").value = response.last_name;
   document.getElementById("email").value = response.email;
   document.getElementById("phone").value = response.phone;
+  editModal.show();
 };
 updateForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -92,8 +93,19 @@ tbody.addEventListener("click", (e) => {
   }
 });
 const deleteUser = async (id) => {
-  const data = await fetch(`action.php?delete=1&id=${id}`, {
-    method: "GET",
+  const formData = new FormData();
+  formData.append("delete", "1");
+  formData.append("id", id);
+
+  const csrfToken = document.querySelector(
+    '#add-user-form input[name="csrf_token"]'
+  ).value;
+
+  formData.append("csrf_token", csrfToken);
+
+  const data = await fetch("action.php", {
+    method: "POST",
+    body: formData,
   });
   const response = await data.text();
   showAlert.innerHTML = response;
