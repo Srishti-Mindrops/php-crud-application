@@ -29,6 +29,7 @@ jobs:
         with:
           scan-type: fs
           scan-ref: .
+          version: v0.76.2
           scanners: vuln,secret,misconfig
           format: table
           severity: CRITICAL,HIGH,MEDIUM,LOW
