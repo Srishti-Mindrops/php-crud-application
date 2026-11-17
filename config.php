@@ -30,8 +30,10 @@
                 $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }catch(PDOException $e){
-                die("Error: ". $e->getMessage());
+                 error_log("Database connection failed: " . $e->getMessage());
+                 http_response_code(500);
+                 die("A database error occurred. Please try again later.");
+              }
             }
         }
-    }
 ?>
