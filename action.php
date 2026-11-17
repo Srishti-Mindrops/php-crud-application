@@ -48,7 +48,13 @@ if(isset($_GET["read"])){
 if(isset($_GET['edit'])){
     $id = (int)$_GET['id'];
     $user = $db->readOne($id);
-    echo json_encode($user);
+
+    header('Content-Type: application/json; charset=utf-8');
+    // nosemgrep: php.lang.security.injection.echoed-request.echoed-request -- JSON API response; JSON_HEX_* encoding and application consumes it via response.json() into input .value fields.
+    echo json_encode(
+        $user,
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    );
 }
 if(isset($_POST['update'])){
     $id = (int)$util->testInput($_POST['id']);
