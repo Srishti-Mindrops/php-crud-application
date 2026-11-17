@@ -1,0 +1,28 @@
+name: PHP CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - ci-cd-setup
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  php-syntax-check:
+    name: PHP Syntax Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Check PHP syntax
+        run: |
+          find . -type f -name "*.php" -not -path "./.git/*" -print0 | xargs -0 -n1 php -l
