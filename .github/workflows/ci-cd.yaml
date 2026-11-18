@@ -66,6 +66,11 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
 
+      - name: Validate SSH Private Key
+        run: |
+          ssh-keygen -y -f ~/.ssh/deploy_key > /tmp/deploy_key.pub
+          ssh-keygen -lf /tmp/deploy_key.pub
+
       - name: Test SSH Connection
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
